@@ -33,11 +33,9 @@ client.on('message', message => {
         client.sendMessage(message.from, 'Hoje estou de folga, e no momento devo está estudando, mas pode deixar sua mensagem, que responderei assim que possível. =)');
     } else if (['bahia'].includes(msg)) {
         client.sendMessage(message.from, 'Fala Capixaba, eu sou MAN assistente virtual do Dimas, no momento devo está um pouco ocupado, mas pode deixar sua mensagem, que responderei assim que possível. =)');
-    } else if (['', 'praça'].includes(msg)) {
+    } else if (['praça'].includes(msg)) {
         client.sendMessage(message.from, 'e ai praça, o que vc manda? ');
-    } 
-    
-    else {
+    } else {
         client.sendMessage(message.from, 'Desculpe, não entendi sua mensagem.\n Eu sou um assitente virtual do Dimas, escolha uma das opções:\n 1 - Assunto Pessoal \n 2 - Sobre Trabalho');
     }
 });
