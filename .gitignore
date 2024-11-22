@@ -1,0 +1,9 @@
+node_modules
+._.git
+._.gitignore
+._main.js
+._.wwebjs_cahe
+._node_modules
+._package.json
+._package-lock.json
+._.wwebjs_cache
