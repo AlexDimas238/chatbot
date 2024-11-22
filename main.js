@@ -3,46 +3,44 @@ const qrcode = require('qrcode-terminal');
 
 const client = new Client({
     puppeteer: {
-        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', // Caminho para o navegador Chrome
+        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     }
 });
 
 client.on('ready', () => {
-    console.log('Cliente conectado!');
+    console.log('Client is ready!');
 });
 
 client.on('qr', qr => {
     qrcode.generate(qr, { small: true });
 });
 
-// Usando apenas um listener para todas as mensagens
-client.on('message_create', message => {
-    if (message.from === client.info.wid.user) return;
+client.on('message', message => {
+    const msg = message.body.toLowerCase().trim();
 
-    const msg = message.body.toLowerCase();
-    console.log(`Mensagem recebida: ${msg}`); // Adicionando log para depuração
-
-
-    // Respostas para diferentes condições
-    if (msg === 'oi' || msg === 'olá' || msg === 'oi, tudo bem?' || msg === 'e ai' || msg === 'fala' || msg === 'ei') {
+    if (['oi', 'olá', 'ola', 'e aí', 'fala', 'opa', 'ei', 'bom dia', 'boa tarde', 'boa noite'].includes(msg)) {
         client.sendMessage(message.from, 'Oi, tudo bem?');
-    } else if (msg === 'como vc ta' || msg === 'como você está?' || msg === 'tudo sim' || msg === 'tudo bem' || msg === 'de boa' || msg === 'beleza' || msg === 'e você?' || msg === 'tudo') {
-        client.sendMessage(message.from, 'Estou bem, graças a Deus');
-    } else if (msg === 'preciso te fazer uma pergunta' || msg === 'tira uma duvida' || msg === 'tudo me tira uma duvida' || msg === 'tenho uma pergunta' || msg === 'tenho dúvida') {
-        client.sendMessage(message.from, 'Pode falar');
-    } else if (msg === 'ta de serviço' || msg === 'ta no bpm' || msg === 'ta na base' || msg === 'ta trabalhando' || msg === 'tá no serviço') {
-        client.sendMessage(message.from, 'Hoje estou de folga, e essa é uma mensagem automática');
-    } else if (msg === 'bom dia' || msg === 'boa tarde' || msg === 'boa noite' || msg === 'oi bom dia' || msg === 'oi boa tarde') {
-        client.sendMessage(message.from, 'Olá, eu sou o assistente virtual do Dimas, e esta é uma resposta automática. Seja bem-vindo!');
-        client.sendMessage(message.from, 'Sobre o que deseja falar?\n1 - Assunto pessoal\n2 - Sobre trabalho');
-    } else if (msg === '1' || msg === 'pessoal' || msg === 'assunto pessoal' || msg === 'pessoal' || msg === 'assunto privado') {
-        client.sendMessage(message.from, 'Ok,\nAguarde só um instante, já vou te responder');
-    } else if (msg === '2' || msg === 'trabalho' || msg === 'sobre trabalho' || msg === 'seerviço' || msg === 'profissional') {
-        client.sendMessage(message.from, 'Hoje estou de folga,\nPode deixar a sua mensagem que assim que possível eu respondo');
-    } else {
-        client.sendMessage(message.from, 'Desculpe, não entendi sua mensagem. Você pode tentar de novo?');
+    } else if (['como você está?', 'como vc ta', 'tudo bem?', 'tudo bem', 'de boa?', 'de boa', 'e aí, tudo bem?', 'e vc?', 'tudo'].includes(msg)) {
+        client.sendMessage(message.from, 'Estou bem, graças a Deus. E você?');
+    } else if (['tira uma dúvida', 'preciso de ajuda', 'pode me ajudar?', 'preciso perguntar algo', 'tenho uma dúvida', 'me ajuda?', 'ajuda aí', 'pergunta'].includes(msg)) {
+        client.sendMessage(message.from, 'Claro, pode falar sua dúvida.');
+    } else if (['tá de serviço?', 'está trabalhando?', 'tá no bpm?', 'tá na base?', 'você está de plantão?', 'ta trabalhando', 'serviço'].includes(msg)) {
+        client.sendMessage(message.from, 'Hoje estou de folga, mas essa é uma mensagem automática. Deixe sua mensagem, que responderei assim que possível.');
+    } else if (['1', 'pessoal'].includes(msg)) {
+        client.sendMessage(message.from, 'Se for urgente pode me ligar, nesse momento devo está estudando ou dormindo se ja for tarde da noite. Se não quiser ligar pode deixar sua mensagem, que responderei assim que possível. =)');
+    } else if (['2', 'trabalho'].includes(msg)) {
+        client.sendMessage(message.from, 'Hoje estou de folga, e no momento devo está estudando, mas pode deixar sua mensagem, que responderei assim que possível. =)');
+    } else if (['bahia'].includes(msg)) {
+        client.sendMessage(message.from, 'Fala Capixaba, eu sou MAN assistente virtual do Dimas, no momento devo está um pouco ocupado, mas pode deixar sua mensagem, que responderei assim que possível. =)');
+    } else if (['', 'praça'].includes(msg)) {
+        client.sendMessage(message.from, 'e ai praça, o que vc manda? ');
+    } 
+    
+    else {
+        client.sendMessage(message.from, 'Desculpe, não entendi sua mensagem.\n Eu sou um assitente virtual do Dimas, escolha uma das opções:\n 1 - Assunto Pessoal \n 2 - Sobre Trabalho');
     }
 });
+
 
 client.initialize();
